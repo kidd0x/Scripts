@@ -1,48 +1,51 @@
-
 let dataTransfer = new DataTransfer();
-let box = document.querySelectorAll("[role=textbox]")[1];
+let box = document.querySelectorAll("[role='textbox']")[1];
+
 if (!box) {
-  alert("No chat open, Make sure you have opened the chat you want to spam.");
-  throw new Error(
-    "No chat open, Make sure you have opened the chat you want to spam."
-  );
+  alert("No chat open. Make sure you have opened the chat you want to spam.");
+  throw new Error("No chat open. Make sure you have opened the chat you want to spam.");
 }
 
-// Get the number of messages to spam
-var count = prompt(
-  "Enter number of messages: \nPlease Enter a number between 0 and 100",
-  "10"
-);
+let count = parseInt(prompt("Enter number of messages (between 1 and 100):", "10"), 10);
 
-if (!count || isNaN(count) || count < 0 || count > 100) {
-  alert(
-    "Please enter only NUMBER between 0 and 100. \nYou can re-run the script now."
-  );
-} else {
-  var message = prompt("MESSAGE YOU WANT TO SPAM : ", "Hello from spammer...");
-  if (message == null || message == "") {
-    alert("Please enter a message to spam. \nYou can re-run the script now.");
-  } else {
-    console.clear();
-    dataTransfer.setData("text/plain", message);
+if (isNaN(count) || count < 1 || count > 100) {
+  alert("Invalid input! Enter a NUMBER between 1 and 100.");
+  throw new Error("Invalid input for message count.");
+}
 
-    (async () => {
-      for (let i = 0; i < count; i++) {
-        // Get the input box
+let message = prompt("Enter the MESSAGE to spam:", "Hello from spammer...");
+if (!message) {
+  alert("Message cannot be empty. Re-run the script to try again.");
+  throw new Error("Empty message input.");
+}
 
-        box.focus();
-        box.dispatchEvent(
-          new ClipboardEvent("paste", {
-            clipboardData: dataTransfer,
+dataTransfer.setData("text/plain", message);
 
-            bubbles: true,
-            cancelable: true,
-          })
-        );
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        box.parentElement.parentElement.parentElement.children[1].children[0].click();
-        console.log(`"${message}" sent -> ${i + 1} times`);
-      }
-    })();
+function findSendButton() {
+  return document.querySelector("span[data-icon='send']")?.closest("button");
+}
+
+(async () => {
+  console.clear();
+
+  for (let i = 0; i < count; i++) {
+    box.focus();
+
+    box.dispatchEvent(new ClipboardEvent("paste", {
+      clipboardData: dataTransfer,
+      bubbles: true,
+      cancelable: true,
+    }));
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    let sendButton = findSendButton();
+    if (sendButton) {
+      sendButton.click();
+      console.log(`"${message}" sent -> ${i + 1} times`);
+    } else {
+      console.warn("Send button not found. Stopping script.");
+      break;
+    }
   }
-}
+})();
