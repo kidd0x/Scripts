@@ -1,1 +1,1 @@
-python -m PyInstaller --onefile --noconsole --add-data "C:\Users\doros\Desktop\duck\duck.png;." duck.py
+python -m PyInstaller --onefile --noconsole --add-data "C:\Users\janelike\Desktop\duck\duck.png;." duck.py
