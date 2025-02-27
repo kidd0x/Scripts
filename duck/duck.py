@@ -13,7 +13,6 @@ root.attributes("-fullscreen", True)
 root.attributes("-topmost", True)  
 root.attributes("-transparentcolor", "white"
 
-# Load the image and resize it
 try:
     original_duck_image = Image.open(image_path).resize((100, 100), Image.Resampling.LANCZOS)
     flipped_duck_image = ImageOps.mirror(original_duck_image)
