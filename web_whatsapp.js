@@ -22,7 +22,7 @@ if (!message) {
 dataTransfer.setData("text/plain", message);
 
 function findSendButton() {
-  return document.querySelector("span[data-icon='send']")?.closest("button");
+  return document.querySelector("button[aria-label='Send']");
 }
 
 (async () => {
